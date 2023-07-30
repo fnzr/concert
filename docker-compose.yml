@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+  api:
+    build:
+      context: api
+    ports:
+      - "${WWW_PORT}:80"
+    env_file:
+      - .env
+    volumes:
+      - ./api:/api
+  db:
+    image: mariadb:10
+    ports:
+      - "${DB_PORT}:3306"1
+    environment:
+      - MARIADB_DATABASE=concert
+      - MARIADB_USER=concert
+      - MARIADB_PASSWORD=concert
+      - MARIADB_ROOT_PASSWORD=concert

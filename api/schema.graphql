@@ -1,0 +1,387 @@
+scalar Mixed
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+input Order {
+    asc: String
+    desc: String
+}
+
+input Join {
+    LEFT: String
+    RIGHT: String
+    INNER: String
+}
+
+input CustomCondition {
+    expr: String!
+    where: WhereCondition!
+}
+
+"""
+Only one condition should be used per field.
+
+Multiple conditions on the same field should be wrapped on `and` or `or` groups.
+"""
+input WhereCondition {
+    eq: Mixed
+    neq: Mixed
+    lt: Int
+    lte: Int
+    gt: Int
+    gte: Int
+    in: [Mixed!]
+    nin: [Mixed!]
+    contains: String
+    startsWith: String
+    endsWith: String
+    nlike: String
+    like: String
+    regex: String
+    result_in: String
+    result_nin: String
+}
+
+type ServiceQuery {
+    _total(operation: String!): Int
+    server_time: String!
+}
+
+type ServiceMutation {
+    login(
+        user: String!
+        password: String!
+    ): String!
+}
+
+type Query {
+    artists: ArtistResource
+    albums: AlbumResource
+    recordings: RecordingResource
+    users: UserResource
+    groups: GroupResource
+    service: ServiceQuery
+}
+
+type Mutation {
+    artists: ArtistMutation
+    albums: AlbumMutation
+    recordings: RecordingMutation
+    users: UserMutation
+    groups: GroupMutation
+    service: ServiceMutation
+}
+
+type Artist {
+    id: ID
+    name: String
+    albums(where: AlbumWhere pluck: String): [Album!]
+}
+
+input ArtistWhere {
+    or: [ArtistWhere!]
+    and: [ArtistWhere!]
+    _condition: [CustomCondition!]
+    id: WhereCondition
+    name: WhereCondition
+    albums: AlbumWhere
+}
+
+type ArtistResource {
+    list(
+        id: ID
+        where: ArtistWhere
+        limit: Int
+        offset: Int
+        group: [String!]
+        order: [Order!]
+        pluck: String
+        having: ArtistWhere
+        join: [Join!]
+        distinct: Boolean
+    ): [Artist!]!
+    find(
+        id: ID
+        pluck: String
+        where: ArtistWhere
+    ): Artist
+    HasMostAlbums: String!
+}
+
+"""
+Represents an album released by an artist
+"""
+type Album {
+    id: ID
+    name: String
+        """
+        Release date as a unix_timestamp
+        """
+    release_date: Int
+    id_artist: String!
+    artist(where: ArtistWhere pluck: String): [Artist!]    recordings(where: RecordingWhere pluck: String): [Recording!]
+}
+
+input AlbumWhere {
+    or: [AlbumWhere!]
+    and: [AlbumWhere!]
+    _condition: [CustomCondition!]
+    id: WhereCondition
+    name: WhereCondition
+    release_date: WhereCondition
+    id_artist: WhereCondition
+    artist: ArtistWhere
+    recordings: RecordingWhere
+}
+
+type AlbumResource {
+    list(
+        id: ID
+        where: AlbumWhere
+        limit: Int
+        offset: Int
+        group: [String!]
+        order: [Order!]
+        pluck: String
+        having: AlbumWhere
+        join: [Join!]
+        distinct: Boolean
+    ): [Album!]!
+    find(
+        id: ID
+        pluck: String
+        where: AlbumWhere
+    ): Album
+}
+
+type Recording {
+    id: ID
+    name: String
+    id_album: Int!
+    album(where: AlbumWhere pluck: String): [Album!]
+}
+
+input RecordingWhere {
+    or: [RecordingWhere!]
+    and: [RecordingWhere!]
+    _condition: [CustomCondition!]
+    id: WhereCondition
+    name: WhereCondition
+    id_album: WhereCondition
+    album: AlbumWhere
+}
+
+type RecordingResource {
+    list(
+        id: ID
+        where: RecordingWhere
+        limit: Int
+        offset: Int
+        group: [String!]
+        order: [Order!]
+        pluck: String
+        having: RecordingWhere
+        join: [Join!]
+        distinct: Boolean
+    ): [Recording!]!
+    find(
+        id: ID
+        pluck: String
+        where: RecordingWhere
+    ): Recording
+}
+
+type User {
+    id: ID
+    login: String
+    groups(where: GroupWhere pluck: String): [Group!]
+}
+
+input UserWhere {
+    or: [UserWhere!]
+    and: [UserWhere!]
+    _condition: [CustomCondition!]
+    id: WhereCondition
+    login: WhereCondition
+    groups: GroupWhere
+}
+
+type UserResource {
+    list(
+        id: ID
+        where: UserWhere
+        limit: Int
+        offset: Int
+        group: [String!]
+        order: [Order!]
+        pluck: String
+        having: UserWhere
+        join: [Join!]
+        distinct: Boolean
+    ): [User!]!
+    find(
+        id: ID
+        pluck: String
+        where: UserWhere
+    ): User
+}
+
+type Group {
+    id: ID
+    name: String
+    users(where: UserWhere pluck: String): [User!]
+}
+
+input GroupWhere {
+    or: [GroupWhere!]
+    and: [GroupWhere!]
+    _condition: [CustomCondition!]
+    id: WhereCondition
+    name: WhereCondition
+    users: UserWhere
+}
+
+type GroupResource {
+    list(
+        id: ID
+        where: GroupWhere
+        limit: Int
+        offset: Int
+        group: [String!]
+        order: [Order!]
+        pluck: String
+        having: GroupWhere
+        join: [Join!]
+        distinct: Boolean
+    ): [Group!]!
+    find(
+        id: ID
+        pluck: String
+        where: GroupWhere
+    ): Group
+}
+input ArtistMutationInput {
+    id: ID
+    name: String
+    albums: ArtistAlbumAssociation
+}
+
+input ArtistAlbumAssociation {
+    upsert: [AlbumMutationInput!]
+    insert: [AlbumMutationInput!]
+    update: [ID!]
+    delete: [ID!]
+}
+
+type ArtistMutation {
+    insert(object: ArtistMutationInput!): Artist
+    insert_batch(objects: [ArtistMutationInput!]!): [Artist!]!
+    upsert(object: ArtistMutationInput!): Artist
+    upsert_batch(objects: [ArtistMutationInput!]): [Artist!]!
+    update(id: ID! set: ArtistMutationInput!): Artist
+    update_batch(where: ArtistWhere! set: ArtistMutationInput!): Artist
+    delete(id: ID!): Int
+    delete_batch(where: ArtistWhere!): Int
+}
+
+input AlbumMutationInput {
+    id: ID
+    name: String
+    release_date: Int
+    artist: AlbumArtistAssociation
+    recordings: AlbumRecordingAssociation
+}
+
+input AlbumArtistAssociation {
+    id: ID!
+}
+input AlbumRecordingAssociation {
+    upsert: [RecordingMutationInput!]
+    insert: [RecordingMutationInput!]
+    update: [ID!]
+    delete: [ID!]
+}
+
+type AlbumMutation {
+    insert(object: AlbumMutationInput!): Album
+    insert_batch(objects: [AlbumMutationInput!]!): [Album!]!
+    upsert(object: AlbumMutationInput!): Album
+    upsert_batch(objects: [AlbumMutationInput!]): [Album!]!
+    update(id: ID! set: AlbumMutationInput!): Album
+    update_batch(where: AlbumWhere! set: AlbumMutationInput!): Album
+    delete(id: ID!): Int
+    delete_batch(where: AlbumWhere!): Int
+}
+
+input RecordingMutationInput {
+    id: ID
+    name: String
+    album: RecordingAlbumAssociation
+}
+
+input RecordingAlbumAssociation {
+    id: ID!
+}
+
+type RecordingMutation {
+    insert(object: RecordingMutationInput!): Recording
+    insert_batch(objects: [RecordingMutationInput!]!): [Recording!]!
+    upsert(object: RecordingMutationInput!): Recording
+    upsert_batch(objects: [RecordingMutationInput!]): [Recording!]!
+    update(id: ID! set: RecordingMutationInput!): Recording
+    update_batch(where: RecordingWhere! set: RecordingMutationInput!): Recording
+    delete(id: ID!): Int
+    delete_batch(where: RecordingWhere!): Int
+}
+
+input UserMutationInput {
+    id: ID
+    login: String
+    groups: UserGroupAssociation
+}
+
+input UserGroupAssociation {
+    append: [ID!]
+    delete: [ID!]
+    replace: [ID!]
+}
+
+type UserMutation {
+    insert(object: UserMutationInput!): User
+    insert_batch(objects: [UserMutationInput!]!): [User!]!
+    upsert(object: UserMutationInput!): User
+    upsert_batch(objects: [UserMutationInput!]): [User!]!
+    update(id: ID! set: UserMutationInput!): User
+    update_batch(where: UserWhere! set: UserMutationInput!): User
+    delete(id: ID!): Int
+    delete_batch(where: UserWhere!): Int
+    RevokeRights(
+        id: Int!
+    ): Boolean!
+}
+
+input GroupMutationInput {
+    id: ID
+    name: String
+    users: GroupUserAssociation
+}
+
+input GroupUserAssociation {
+    append: [ID!]
+    delete: [ID!]
+    replace: [ID!]
+}
+
+type GroupMutation {
+    insert(object: GroupMutationInput!): Group
+    insert_batch(objects: [GroupMutationInput!]!): [Group!]!
+    upsert(object: GroupMutationInput!): Group
+    upsert_batch(objects: [GroupMutationInput!]): [Group!]!
+    update(id: ID! set: GroupMutationInput!): Group
+    update_batch(where: GroupWhere! set: GroupMutationInput!): Group
+    delete(id: ID!): Int
+    delete_batch(where: GroupWhere!): Int
+}
