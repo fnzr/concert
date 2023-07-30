@@ -14,6 +14,10 @@ RUN apk add -U --no-cache \
 RUN docker-php-ext-install \
     opcache \
     mbstring \
+    mysqli \
+    pdo \
+    pdo_mysql \
+    && docker-php-ext-enable pdo_mysql \
     && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && pecl install apcu \
     && docker-php-ext-enable apcu \
@@ -29,4 +33,4 @@ WORKDIR /api
 
 RUN composer install -d /api && touch /api/.env
 
-CMD ["/usr/bin/php", "-S", "0.0.0.0:8000"]
+CMD ["/usr/local/bin/php", "-S", "0.0.0.0:8080", "server.php"]

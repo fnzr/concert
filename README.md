@@ -1,10 +1,12 @@
 Up and Running:
 
-If using docker-compose mappings, run `composer install --ignore-platform-reqs` in the api directory.
-Otherwise, remove the volume mapping from docker-compose.yml
+Clone this repository.
+
+To use local mappings, run `composer install --ignore-platform-reqs` in the api directory and uncomment the lines in the docker-compose.yml file.
+Otherwise, proceed.
 
 Bring everything up `docker-compose up -d`
 
-Restore the database: `mariadb --database=concert -h127.0.0.1 -P$DB_PORT -uconcert -pconcert < db.sql`
+Restore the database: `docker-compose exec db bash -c "mariadb  --database=concert -uconcert -pconcert < /var/db.sql"`
 
-Import the sample requests from "Insomnia.json"
+Import the sample requests from "Insomnia.json". Modify the graphq_url variable to your url.

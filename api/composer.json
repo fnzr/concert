@@ -6,6 +6,12 @@
       "App\\": "src/"
     }
   },
+  "repositories": [
+    {
+      "url": "https://github.com/FrameNetBrasil/orkester",
+      "type": "git"
+    }
+  ],
   "authors": [
     {
       "name": "fnzr",
