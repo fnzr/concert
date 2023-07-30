@@ -11,8 +11,10 @@ services:
       - ./api:/api
   db:
     image: mariadb:10
+    volumes:
+      - db.sql:/var/db.sql
     ports:
-      - "${DB_PORT}:3306"1
+      - "${DB_PORT}:3306"
     environment:
       - MARIADB_DATABASE=concert
       - MARIADB_USER=concert
