@@ -13,6 +13,6 @@
     }
   ],
   "require": {
-    "elymatos/orkester": "@dev",
+    "elymatos/orkester": "@dev"
   }
 }
