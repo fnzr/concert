@@ -1,0 +1,57 @@
+type Group {
+    id: ID
+    name: String
+    users(where: UserWhere pluck: String): [User!]
+}
+
+input GroupWhere {
+    or: [GroupWhere!]
+    and: [GroupWhere!]
+    _condition: [CustomCondition!]
+    id: WhereCondition
+    name: WhereCondition
+    users: UserWhere
+}
+
+type GroupResource {
+    list(
+        id: ID
+        where: GroupWhere
+        limit: Int
+        offset: Int
+        group: [String!]
+        order: [Order!]
+        pluck: String
+        having: GroupWhere
+        join: [Join!]
+        distinct: Boolean
+    ): [Group!]!
+    find(
+        id: ID
+        pluck: String
+        where: GroupWhere
+    ): Group
+}
+
+input GroupMutationInput {
+    id: ID
+    name: String
+    users: GroupUserAssociation
+}
+
+input GroupUserAssociation {
+    append: [ID!]
+    delete: [ID!]
+    replace: [ID!]
+}
+
+type GroupMutation {
+    insert(object: GroupMutationInput!): Group
+    insert_batch(objects: [GroupMutationInput!]!): [Group!]!
+    upsert(object: GroupMutationInput!): Group
+    upsert_batch(objects: [GroupMutationInput!]): [Group!]!
+    update(id: ID! set: GroupMutationInput!): Group
+    update_batch(where: GroupWhere! set: GroupMutationInput!): Group
+    delete(id: ID!): Int
+    delete_batch(where: GroupWhere!): Int
+}

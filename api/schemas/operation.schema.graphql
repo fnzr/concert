@@ -1,0 +1,17 @@
+type Query {
+    artists: ArtistResource
+    albums: AlbumResource
+    recordings: RecordingResource
+    users: UserResource
+    groups: GroupResource
+    service: ServiceQuery
+}
+
+type Mutation {
+    artists: ArtistMutation
+    albums: AlbumMutation
+    recordings: RecordingMutation
+    users: UserMutation
+    groups: GroupMutation
+    service: ServiceMutation
+}

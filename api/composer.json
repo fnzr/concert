@@ -3,7 +3,8 @@
   "type": "project",
   "autoload": {
     "psr-4": {
-      "App\\": "src/"
+      "App\\": "src/",
+      "Orkester\\": "vendor/elymatos/orkester"
     }
   },
   "repositories": [

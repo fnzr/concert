@@ -2,6 +2,7 @@
 
 return [
     'name' => 'Concert',
+    'mode' => 'development',
     'options' => [
         'app' => 'concert',
         'timezone' => "America/Sao_Paulo",

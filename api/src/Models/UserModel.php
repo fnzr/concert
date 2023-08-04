@@ -3,15 +3,16 @@
 namespace App\Models;
 
 use Orkester\Persistence\Enum\Key;
+use Orkester\Persistence\Map\ClassMap;
 
 class UserModel extends \Orkester\Persistence\Model
 {
-    public static function map(): void
+    public static function map(ClassMap $classMap)
     {
-        parent::map();
-        self::table("user");
-        self::attribute('id_user', key: Key::PRIMARY);
-        self::attribute('login');
-        self::associationMany('groups', GroupModel::class, associativeTable: 'users_groups');
+        $classMap
+            ->table("user")
+            ->attribute('id_user', key: Key::PRIMARY)
+            ->attribute('login')
+            ->associationMany('groups', GroupModel::class, associativeTable: 'users_groups');
     }
 }

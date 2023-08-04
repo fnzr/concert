@@ -1,0 +1,59 @@
+type Artist {
+    id: ID
+    name: String
+    albums(where: AlbumWhere pluck: String): [Album!]
+}
+
+input ArtistWhere {
+    or: [ArtistWhere!]
+    and: [ArtistWhere!]
+    _condition: [CustomCondition!]
+    id: WhereCondition
+    name: WhereCondition
+    albums: AlbumWhere
+}
+
+type ArtistResource {
+    list(
+        id: ID
+        where: ArtistWhere
+        limit: Int
+        offset: Int
+        group: [String!]
+        order: [Order!]
+        pluck: String
+        having: ArtistWhere
+        join: [Join!]
+        distinct: Boolean
+    ): [Artist!]!
+    find(
+        id: ID
+        pluck: String
+        where: ArtistWhere
+    ): Artist
+    HasMostAlbums: Mixed
+}
+
+input ArtistMutationInput {
+    id: ID
+    name: String
+    albums: ArtistAlbumAssociation
+}
+
+input ArtistAlbumAssociation {
+    upsert: [AlbumMutationInput!]
+    insert: [AlbumMutationInput!]
+    update: [ID!]
+    delete: [ID!]
+}
+
+type ArtistMutation {
+    insert(object: ArtistMutationInput!): Artist
+    insert_batch(objects: [ArtistMutationInput!]!): [Artist!]!
+    upsert(object: ArtistMutationInput!): Artist
+    upsert_batch(objects: [ArtistMutationInput!]): [Artist!]!
+    update(id: ID! set: ArtistMutationInput!): Artist
+    update_batch(where: ArtistWhere! set: ArtistMutationInput!): Artist
+    delete(id: ID!): Int
+    delete_batch(where: ArtistWhere!): Int
+}

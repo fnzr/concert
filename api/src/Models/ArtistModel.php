@@ -3,16 +3,17 @@
 namespace App\Models;
 
 use Orkester\Persistence\Enum\Key;
+use Orkester\Persistence\Map\ClassMap;
 
 class ArtistModel extends \Orkester\Persistence\Model
 {
-    public static function map(): void
+    public static function map(ClassMap $classMap)
     {
-        parent::map();
-        self::table("artist");
-        self::attribute('id_artist', key: Key::PRIMARY);
-        self::attribute('name');
-        self::associationMany('albums', AlbumModel::class, 'id_artist');
+        $classMap
+            ->table("artist")
+            ->attribute('id_artist', key: Key::PRIMARY)
+            ->attribute('name')
+            ->associationMany('albums', AlbumModel::class, 'id_artist');
     }
 
     public static function validate(array $row): array

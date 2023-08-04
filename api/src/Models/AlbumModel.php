@@ -5,33 +5,26 @@ namespace App\Models;
 use Carbon\Carbon;
 use Orkester\Persistence\Enum\Key;
 use Orkester\Persistence\Enum\Type;
+use Orkester\Persistence\Map\ClassMap;
 
 class AlbumModel extends \Orkester\Persistence\Model
 {
-    public static function map(): void
+    public static function map(ClassMap $classMap)
     {
-        parent::map();
-        self::table("album");
-        self::attribute('id_album', key: Key::PRIMARY);
-        self::attribute('name');
-        self::attribute('release_date', type: Type::INTEGER);
-        self::attribute('id_artist', key: Key::FOREIGN, nullable: false);
-        self::associationOne('artist', ArtistModel::class, 'id_artist');
-        self::associationMany('recordings', RecordingModel::class, 'id_album');
+        $classMap
+            ->table("album")
+            ->attribute('id_album', key: Key::PRIMARY)
+            ->attribute('name')
+            ->attribute('release_date', type: Type::INTEGER)
+            ->attribute('id_artist', key: Key::FOREIGN, nullable: false)
+            ->associationOne('artist', ArtistModel::class, 'id_artist')
+            ->associationMany('recordings', RecordingModel::class, 'id_album');
     }
 
-    public static function transform(array $row): array
+    public static function prepareWrite(array $data): array
     {
-        $row['release_date'] ??= Carbon::now()->unix();
-        return $row;
+        $data['release_date'] ??= Carbon::now()->unix();
+        return parent::prepareWrite($data);
     }
 
-
-    public static function getApiDocs(): array
-    {
-        return [
-            '_class' => 'Represents an album released by an artist',
-            'release_date' => 'Release date as a unix_timestamp'
-        ];
-    }
 }

@@ -1,0 +1,11 @@
+type ServiceQuery {
+    _total(operation: String!): Int
+    server_time: String!
+}
+
+type ServiceMutation {
+    login(
+        user: String!
+        password: String!
+    ): String!
+}

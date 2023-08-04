@@ -1,0 +1,69 @@
+type Album {
+    id: ID
+    name: String
+    release_date: Int
+    id_artist: String!
+    artist(where: ArtistWhere pluck: String): [Artist!]
+    recordings(where: RecordingWhere pluck: String): [Recording!]
+}
+
+input AlbumWhere {
+    or: [AlbumWhere!]
+    and: [AlbumWhere!]
+    _condition: [CustomCondition!]
+    id: WhereCondition
+    name: WhereCondition
+    release_date: WhereCondition
+    id_artist: WhereCondition
+    artist: ArtistWhere
+    recordings: RecordingWhere
+}
+
+type AlbumResource {
+    list(
+        id: ID
+        where: AlbumWhere
+        limit: Int
+        offset: Int
+        group: [String!]
+        order: [Order!]
+        pluck: String
+        having: AlbumWhere
+        join: [Join!]
+        distinct: Boolean
+    ): [Album!]!
+    find(
+        id: ID
+        pluck: String
+        where: AlbumWhere
+    ): Album
+}
+
+input AlbumMutationInput {
+    id: ID
+    name: String
+    release_date: Int
+    artist: AlbumArtistAssociation
+    recordings: AlbumRecordingAssociation
+}
+
+input AlbumArtistAssociation {
+    id: ID!
+}
+input AlbumRecordingAssociation {
+    upsert: [RecordingMutationInput!]
+    insert: [RecordingMutationInput!]
+    update: [ID!]
+    delete: [ID!]
+}
+
+type AlbumMutation {
+    insert(object: AlbumMutationInput!): Album
+    insert_batch(objects: [AlbumMutationInput!]!): [Album!]!
+    upsert(object: AlbumMutationInput!): Album
+    upsert_batch(objects: [AlbumMutationInput!]): [Album!]!
+    update(id: ID! set: AlbumMutationInput!): Album
+    update_batch(where: AlbumWhere! set: AlbumMutationInput!): Album
+    delete(id: ID!): Int
+    delete_batch(where: AlbumWhere!): Int
+}
