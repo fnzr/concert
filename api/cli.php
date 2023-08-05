@@ -20,6 +20,15 @@ Orkester\Manager::init();
 //
 //mdump($get);
 
+
+
+//\Orkester\Persistence\PersistenceManager::beginTransaction();
+//$writer = new \Orkester\Resource\ResourceFacade(new \App\Resources\ArtistResource(ArtistModel::class), \Orkester\Manager::getContainer());
+//$writer->insert([
+//    'name' => 'abc'
+//]);
+//\Orkester\Persistence\PersistenceManager::rollback();
+
 $generator = new \Orkester\GraphQL\Generator\SchemaGenerator();
 $generator->writeOperationSchema('./schemas');
 $generator->writeAllResourceSchemas('./schemas/resources');

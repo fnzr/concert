@@ -2,19 +2,19 @@
 
 namespace App\Resources;
 
-use App\Models\AlbumModel;
 use App\Models\GroupModel;
-use App\Models\UserModel;
-use Orkester\Resource\BasicResource;
+use App\Resources\Input\GroupInput;
+use Orkester\Persistence\Criteria\Criteria;
+use Orkester\Persistence\Map\ClassMap;
 use Orkester\Manager;
 use Orkester\Resource\ResourceInterface;
 
-class GroupResource extends BasicResource
+class GroupResource implements ResourceInterface
 {
 
-    public function __construct()
+    public function insert(GroupInput $input): int|string
     {
-        parent::__construct(GroupModel::class);
+        return GroupModel::insert((array) $input);
     }
 
     public function getAssociatedResource(string $association): ?ResourceInterface
@@ -23,5 +23,25 @@ class GroupResource extends BasicResource
             'users' => Manager::getContainer()->make(UserResource::class),
             default => null
         };
+    }
+
+    public function isFieldReadable(string $field): bool
+    {
+        return true;
+    }
+
+    public function getCriteria(): Criteria
+    {
+        return GroupModel::getCriteria();
+    }
+
+    public function getClassMap(): ClassMap
+    {
+        return GroupModel::getClassMap();
+    }
+
+    public function getName(): string
+    {
+        return "groups";
     }
 }

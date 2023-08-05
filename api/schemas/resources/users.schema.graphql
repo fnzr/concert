@@ -33,6 +33,7 @@ type UserResource {
     ): User
 }
 
+
 input UserMutationInput {
     id: ID
     login: String
@@ -55,6 +56,6 @@ type UserMutation {
     delete(id: ID!): Int
     delete_batch(where: UserWhere!): Int
     RevokeRights(
-        id: Int!
+            id: Int!
     ): Boolean!
 }

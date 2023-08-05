@@ -48,24 +48,32 @@ input WhereCondition {
 type Query {
     artists: ArtistResource
     albums: AlbumResource
-    recordings: RecordingResource
+    recordings: recordingsResource
     users: UserResource
-    groups: GroupResource
+    groups: groupsResource
     service: ServiceQuery
 }
 
 type Mutation {
     artists: ArtistMutation
     albums: AlbumMutation
-    recordings: RecordingMutation
+    recordings: recordingsMutation
     users: UserMutation
-    groups: GroupMutation
+    groups: groupsMutation
     service: ServiceMutation
 }
 
 type ServiceQuery {
     _total(operation: String!): Int
     server_time: String!
+    divide_by_two(
+            input: Mixed!
+    )
+    : Int!
+    format_input(
+            input: Mixed!
+    )
+    : Mixed!
 }
 
 type ServiceMutation {
@@ -79,7 +87,6 @@ type Album {
     id: ID
     name: String
     release_date: Int
-    id_artist: String!
     artist(where: ArtistWhere pluck: String): [Artist!]
     recordings(where: RecordingWhere pluck: String): [Recording!]
 }
@@ -91,7 +98,6 @@ input AlbumWhere {
     id: WhereCondition
     name: WhereCondition
     release_date: WhereCondition
-    id_artist: WhereCondition
     artist: ArtistWhere
     recordings: RecordingWhere
 }
@@ -115,6 +121,7 @@ type AlbumResource {
         where: AlbumWhere
     ): Album
 }
+
 
 input AlbumMutationInput {
     id: ID
@@ -178,8 +185,9 @@ type ArtistResource {
         pluck: String
         where: ArtistWhere
     ): Artist
-    HasMostAlbums: Mixed
+    HasMostAlbums: String!
 }
+
 
 input ArtistMutationInput {
     id: ID
@@ -205,120 +213,108 @@ type ArtistMutation {
     delete_batch(where: ArtistWhere!): Int
 }
 
-type Group {
+type groups {
     id: ID
     name: String
     users(where: UserWhere pluck: String): [User!]
 }
 
-input GroupWhere {
-    or: [GroupWhere!]
-    and: [GroupWhere!]
+input groupsWhere {
+    or: [groupsWhere!]
+    and: [groupsWhere!]
     _condition: [CustomCondition!]
     id: WhereCondition
     name: WhereCondition
     users: UserWhere
 }
 
-type GroupResource {
+type groupsResource {
     list(
         id: ID
-        where: GroupWhere
+        where: groupsWhere
         limit: Int
         offset: Int
         group: [String!]
         order: [Order!]
         pluck: String
-        having: GroupWhere
+        having: groupsWhere
         join: [Join!]
         distinct: Boolean
-    ): [Group!]!
+    ): [groups!]!
     find(
         id: ID
         pluck: String
-        where: GroupWhere
-    ): Group
+        where: groupsWhere
+    ): groups
 }
 
-input GroupMutationInput {
+
+input groupsMutationInput {
     id: ID
     name: String
-    users: GroupUserAssociation
+    users: groupsUserAssociation
 }
 
-input GroupUserAssociation {
+input groupsUserAssociation {
     append: [ID!]
     delete: [ID!]
     replace: [ID!]
 }
 
-type GroupMutation {
-    insert(object: GroupMutationInput!): Group
-    insert_batch(objects: [GroupMutationInput!]!): [Group!]!
-    upsert(object: GroupMutationInput!): Group
-    upsert_batch(objects: [GroupMutationInput!]): [Group!]!
-    update(id: ID! set: GroupMutationInput!): Group
-    update_batch(where: GroupWhere! set: GroupMutationInput!): Group
-    delete(id: ID!): Int
-    delete_batch(where: GroupWhere!): Int
+type groupsMutation {
+    insert(object: groupsMutationInput!): groups
+    insert_batch(objects: [groupsMutationInput!]!): [groups!]!
 }
 
-type Recording {
+type recordings {
     id: ID
     name: String
-    id_album: Int!
     album(where: AlbumWhere pluck: String): [Album!]
 }
 
-input RecordingWhere {
-    or: [RecordingWhere!]
-    and: [RecordingWhere!]
+input recordingsWhere {
+    or: [recordingsWhere!]
+    and: [recordingsWhere!]
     _condition: [CustomCondition!]
     id: WhereCondition
     name: WhereCondition
-    id_album: WhereCondition
     album: AlbumWhere
 }
 
-type RecordingResource {
+type recordingsResource {
     list(
         id: ID
-        where: RecordingWhere
+        where: recordingsWhere
         limit: Int
         offset: Int
         group: [String!]
         order: [Order!]
         pluck: String
-        having: RecordingWhere
+        having: recordingsWhere
         join: [Join!]
         distinct: Boolean
-    ): [Recording!]!
+    ): [recordings!]!
     find(
         id: ID
         pluck: String
-        where: RecordingWhere
-    ): Recording
+        where: recordingsWhere
+    ): recordings
 }
 
-input RecordingMutationInput {
+
+input recordingsMutationInput {
     id: ID
     name: String
-    album: RecordingAlbumAssociation
+    album: recordingsAlbumAssociation
 }
 
-input RecordingAlbumAssociation {
+input recordingsAlbumAssociation {
     id: ID!
 }
 
-type RecordingMutation {
-    insert(object: RecordingMutationInput!): Recording
-    insert_batch(objects: [RecordingMutationInput!]!): [Recording!]!
-    upsert(object: RecordingMutationInput!): Recording
-    upsert_batch(objects: [RecordingMutationInput!]): [Recording!]!
-    update(id: ID! set: RecordingMutationInput!): Recording
-    update_batch(where: RecordingWhere! set: RecordingMutationInput!): Recording
+type recordingsMutation {
     delete(id: ID!): Int
-    delete_batch(where: RecordingWhere!): Int
+    delete_batch(where: recordingsWhere!): Int
 }
 
 type User {
@@ -356,6 +352,7 @@ type UserResource {
     ): User
 }
 
+
 input UserMutationInput {
     id: ID
     login: String
@@ -378,7 +375,7 @@ type UserMutation {
     delete(id: ID!): Int
     delete_batch(where: UserWhere!): Int
     RevokeRights(
-        id: Int!
+            id: Int!
     ): Boolean!
 }
 

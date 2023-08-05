@@ -1,6 +1,14 @@
 type ServiceQuery {
     _total(operation: String!): Int
     server_time: String!
+    divide_by_two(
+            input: Mixed!
+    )
+    : Int!
+    format_input(
+            input: Mixed!
+    )
+    : Mixed!
 }
 
 type ServiceMutation {

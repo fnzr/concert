@@ -31,8 +31,9 @@ type ArtistResource {
         pluck: String
         where: ArtistWhere
     ): Artist
-    HasMostAlbums: Mixed
+    HasMostAlbums: String!
 }
+
 
 input ArtistMutationInput {
     id: ID

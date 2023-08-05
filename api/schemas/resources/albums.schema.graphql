@@ -2,7 +2,6 @@ type Album {
     id: ID
     name: String
     release_date: Int
-    id_artist: String!
     artist(where: ArtistWhere pluck: String): [Artist!]
     recordings(where: RecordingWhere pluck: String): [Recording!]
 }
@@ -14,7 +13,6 @@ input AlbumWhere {
     id: WhereCondition
     name: WhereCondition
     release_date: WhereCondition
-    id_artist: WhereCondition
     artist: ArtistWhere
     recordings: RecordingWhere
 }
@@ -38,6 +36,7 @@ type AlbumResource {
         where: AlbumWhere
     ): Album
 }
+
 
 input AlbumMutationInput {
     id: ID

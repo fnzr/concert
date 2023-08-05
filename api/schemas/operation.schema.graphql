@@ -1,17 +1,17 @@
 type Query {
     artists: ArtistResource
     albums: AlbumResource
-    recordings: RecordingResource
+    recordings: recordingsResource
     users: UserResource
-    groups: GroupResource
+    groups: groupsResource
     service: ServiceQuery
 }
 
 type Mutation {
     artists: ArtistMutation
     albums: AlbumMutation
-    recordings: RecordingMutation
+    recordings: recordingsMutation
     users: UserMutation
-    groups: GroupMutation
+    groups: groupsMutation
     service: ServiceMutation
 }

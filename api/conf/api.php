@@ -14,6 +14,8 @@ return [
     'services' => [
         'query' => [
             'server_time' => [\App\Services\SampleService::class, 'serverTime'],
+            'divide_by_two' => [\App\Services\SampleService::class, 'divideByTwo'],
+            'format_input' => [\App\Services\SampleService::class, 'formatInput']
         ],
         'mutation' => [
             'login' => [\App\Services\SampleService::class, 'getToken']

@@ -2,7 +2,11 @@
 
 namespace App\Resources;
 
+use App\Models\AlbumModel;
 use App\Models\ArtistModel;
+use App\Resources\Input\ArtistInput;
+use Orkester\Persistence\Criteria\Criteria;
+use Orkester\Persistence\Map\ClassMap;
 use Orkester\Resource\BasicResource;
 use Orkester\Manager;
 use Orkester\Resource\ResourceInterface;
@@ -14,6 +18,7 @@ class ArtistResource extends BasicResource
     {
         parent::__construct(ArtistModel::class);
     }
+
     public function getAssociatedResource(string $association): ?ResourceInterface
     {
         return match($association) {

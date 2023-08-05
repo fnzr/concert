@@ -1,57 +1,52 @@
-type Group {
+type groups {
     id: ID
     name: String
     users(where: UserWhere pluck: String): [User!]
 }
 
-input GroupWhere {
-    or: [GroupWhere!]
-    and: [GroupWhere!]
+input groupsWhere {
+    or: [groupsWhere!]
+    and: [groupsWhere!]
     _condition: [CustomCondition!]
     id: WhereCondition
     name: WhereCondition
     users: UserWhere
 }
 
-type GroupResource {
+type groupsResource {
     list(
         id: ID
-        where: GroupWhere
+        where: groupsWhere
         limit: Int
         offset: Int
         group: [String!]
         order: [Order!]
         pluck: String
-        having: GroupWhere
+        having: groupsWhere
         join: [Join!]
         distinct: Boolean
-    ): [Group!]!
+    ): [groups!]!
     find(
         id: ID
         pluck: String
-        where: GroupWhere
-    ): Group
+        where: groupsWhere
+    ): groups
 }
 
-input GroupMutationInput {
+
+input groupsMutationInput {
     id: ID
     name: String
-    users: GroupUserAssociation
+    users: groupsUserAssociation
 }
 
-input GroupUserAssociation {
+input groupsUserAssociation {
     append: [ID!]
     delete: [ID!]
     replace: [ID!]
 }
 
-type GroupMutation {
-    insert(object: GroupMutationInput!): Group
-    insert_batch(objects: [GroupMutationInput!]!): [Group!]!
-    upsert(object: GroupMutationInput!): Group
-    upsert_batch(objects: [GroupMutationInput!]): [Group!]!
-    update(id: ID! set: GroupMutationInput!): Group
-    update_batch(where: GroupWhere! set: GroupMutationInput!): Group
-    delete(id: ID!): Int
-    delete_batch(where: GroupWhere!): Int
+type groupsMutation {
+    insert(object: groupsMutationInput!): groups
+    insert_batch(objects: [groupsMutationInput!]!): [groups!]!
 }

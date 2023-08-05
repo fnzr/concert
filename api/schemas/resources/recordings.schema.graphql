@@ -1,57 +1,50 @@
-type Recording {
+type recordings {
     id: ID
     name: String
-    id_album: Int!
     album(where: AlbumWhere pluck: String): [Album!]
 }
 
-input RecordingWhere {
-    or: [RecordingWhere!]
-    and: [RecordingWhere!]
+input recordingsWhere {
+    or: [recordingsWhere!]
+    and: [recordingsWhere!]
     _condition: [CustomCondition!]
     id: WhereCondition
     name: WhereCondition
-    id_album: WhereCondition
     album: AlbumWhere
 }
 
-type RecordingResource {
+type recordingsResource {
     list(
         id: ID
-        where: RecordingWhere
+        where: recordingsWhere
         limit: Int
         offset: Int
         group: [String!]
         order: [Order!]
         pluck: String
-        having: RecordingWhere
+        having: recordingsWhere
         join: [Join!]
         distinct: Boolean
-    ): [Recording!]!
+    ): [recordings!]!
     find(
         id: ID
         pluck: String
-        where: RecordingWhere
-    ): Recording
+        where: recordingsWhere
+    ): recordings
 }
 
-input RecordingMutationInput {
+
+input recordingsMutationInput {
     id: ID
     name: String
-    album: RecordingAlbumAssociation
+    album: recordingsAlbumAssociation
 }
 
-input RecordingAlbumAssociation {
+input recordingsAlbumAssociation {
     id: ID!
 }
 
-type RecordingMutation {
-    insert(object: RecordingMutationInput!): Recording
-    insert_batch(objects: [RecordingMutationInput!]!): [Recording!]!
-    upsert(object: RecordingMutationInput!): Recording
-    upsert_batch(objects: [RecordingMutationInput!]): [Recording!]!
-    update(id: ID! set: RecordingMutationInput!): Recording
-    update_batch(where: RecordingWhere! set: RecordingMutationInput!): Recording
+type recordingsMutation {
     delete(id: ID!): Int
-    delete_batch(where: RecordingWhere!): Int
+    delete_batch(where: recordingsWhere!): Int
 }
